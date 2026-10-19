@@ -1,4 +1,4 @@
-name: Feature request
+git pull origin main --allow-unrelated-historiesname: Feature request
 description: Suggest an improvement
 labels: [enhancement]
 body:

@@ -1,0 +1,116 @@
+{
+  "name": "code-arcade",
+  "displayName": "Code Arcade",
+  "description": "Play small games while your AI coding assistant works.",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "preview": true,
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "game",
+    "snake",
+    "claude",
+    "claude code",
+    "ai",
+    "productivity"
+  ],
+  "galleryBanner": {
+    "color": "#0d0f14",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeArcade.open",
+        "title": "Open Game Panel",
+        "category": "Code Arcade"
+      },
+      {
+        "command": "codeArcade.resetScores",
+        "title": "Reset Scores",
+        "category": "Code Arcade"
+      },
+      {
+        "command": "codeArcade.enableClaudeCodeIntegration",
+        "title": "Enable Claude Code Integration",
+        "category": "Code Arcade"
+      },
+      {
+        "command": "codeArcade.disableClaudeCodeIntegration",
+        "title": "Disable Claude Code Integration",
+        "category": "Code Arcade"
+      },
+      {
+        "command": "codeArcade.showLog",
+        "title": "Show Log",
+        "category": "Code Arcade"
+      }
+    ],
+    "configuration": {
+      "title": "Code Arcade",
+      "properties": {
+        "codeArcade.pauseWhenPanelLosesFocus": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pause the game automatically when the Code Arcade panel loses focus or is hidden."
+        },
+        "codeArcade.pauseWhenClaudeNeedsAttention": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pause the game when Claude Code needs you, for example to answer a permission request. Requires the Claude Code integration."
+        },
+        "codeArcade.pauseWhenClaudeFinishes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Pause the game when Claude Code finishes its turn. Requires the Claude Code integration."
+        },
+        "codeArcade.notifyWhenClaudeNeedsAttention": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a notification when Claude Code needs you while the Code Arcade panel is in focus. Requires the Claude Code integration."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "npm run build:ext && npm run build:web",
+    "build:ext": "node esbuild.mjs",
+    "build:web": "vite build",
+    "watch:ext": "node esbuild.mjs --watch",
+    "watch:web": "vite build --watch",
+    "dev:web": "vite",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "package": "node esbuild.mjs --production && vite build && vsce package --no-dependencies --allow-missing-repository --no-rewrite-relative-links"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/vscode": "1.90.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}

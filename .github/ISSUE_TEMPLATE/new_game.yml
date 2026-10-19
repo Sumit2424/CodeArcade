@@ -1,0 +1,31 @@
+name: New game proposal
+description: Propose a game to add (or tell us you want to build one)
+labels: [game]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Games are plain TypeScript modules. See `docs/adding-a-game.md` for the contract and rules
+        (no new dependencies, no network, canvas only).
+  - type: input
+    id: name
+    attributes:
+      label: Game name
+    validations:
+      required: true
+  - type: textarea
+    id: pitch
+    attributes:
+      label: How does it play?
+      description: Keep it short. Good fits are quick to understand and playable with the keyboard in a small panel.
+    validations:
+      required: true
+  - type: dropdown
+    id: who
+    attributes:
+      label: Who will build it?
+      options:
+        - I will open a pull request
+        - I would like someone else to build it
+    validations:
+      required: true

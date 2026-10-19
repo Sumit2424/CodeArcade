@@ -1,0 +1,44 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log output
+      description: 'Run "Code Arcade: Show Log" and paste the relevant lines. It contains event names only, never prompts or code. Check it before posting.'
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Code Arcade, VS Code, Claude Code extension, and your operating system.
+      placeholder: 'Code Arcade 0.0.1, VS Code 1.9x, Claude Code 2.1.x, Windows 11'
+    validations:
+      required: true
+  - type: dropdown
+    id: integration
+    attributes:
+      label: Is the Claude Code integration enabled?
+      options:
+        - 'Yes'
+        - 'No'
+        - Not related
+    validations:
+      required: true

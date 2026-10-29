@@ -6,6 +6,7 @@ import { buildWebviewHtml } from './html';
 import type { Logger } from './log';
 import type { ScoreStore } from './score-store';
 import { SessionController } from './session-controller';
+import { SessionStatusBar } from './status-bar';
 import { notifyWhenClaudeNeedsAttention, onSettingsChanged, readSettings } from './settings';
 
 /** What the panel needs from the rest of the extension. */
@@ -30,7 +31,8 @@ export class GamePanel {
     const panel = vscode.window.createWebviewPanel(
       'codeArcade.game',
       'Code Arcade',
-      { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+      // Column One keeps the game in the main editor area so Claude's panel stays in view.
+      { viewColumn: vscode.ViewColumn.One, preserveFocus: true },
       {
         enableScripts: true,
         // Keeps a paused game alive while its tab is in the background.
@@ -48,6 +50,7 @@ export class GamePanel {
 
   private readonly disposables: vscode.Disposable[] = [];
   private readonly session: SessionController;
+  private readonly statusBar = new SessionStatusBar();
 
   private constructor(
     private readonly panel: vscode.WebviewPanel,
@@ -61,10 +64,14 @@ export class GamePanel {
     panel.webview.html = buildWebviewHtml(panel.webview, webviewRoot);
     this.disposables.push(
       this.session,
+      this.statusBar,
       panel.webview.onDidReceiveMessage((raw: unknown) => this.handleMessage(raw)),
       panel.onDidDispose(() => this.dispose()),
       services.scores.onDidChange((all) => this.post({ type: 'scores', scores: all })),
-      services.claude.onDidChangeEnabled((enabled) => this.post({ type: 'integration', enabled })),
+      services.claude.onDidChangeEnabled((enabled) => {
+        this.post({ type: 'integration', enabled });
+        this.statusBar.update(this.session.state, enabled);
+      }),
       this.session.onDidChange((state) => this.onSessionChanged(state)),
       onSettingsChanged(() => this.post({ type: 'settings', settings: readSettings() })),
     );
@@ -83,6 +90,7 @@ export class GamePanel {
         this.post({ type: 'scores', scores: this.services.scores.getAll() });
         this.post({ type: 'integration', enabled: this.services.claude.isEnabled() });
         this.post({ type: 'sessionState', state: this.session.state });
+        this.statusBar.update(this.session.state, this.services.claude.isEnabled());
         break;
       case 'enableIntegration':
         void vscode.commands.executeCommand('codeArcade.enableClaudeCodeIntegration');
@@ -95,9 +103,18 @@ export class GamePanel {
 
   private onSessionChanged(state: SessionState): void {
     this.post({ type: 'sessionState', state });
+    this.statusBar.update(state, this.services.claude.isEnabled());
     // Only interrupt with a toast if the user is looking at the game and could miss the prompt.
-    if (state === 'attention' && this.panel.active && notifyWhenClaudeNeedsAttention()) {
-      void vscode.window.showInformationMessage('Claude Code needs your attention.');
+    if (
+      (state === 'attention' || state === 'question') &&
+      this.panel.active &&
+      notifyWhenClaudeNeedsAttention()
+    ) {
+      void vscode.window.showInformationMessage(
+        state === 'question'
+          ? 'Claude Code has a question for you.'
+          : 'Claude Code needs your attention.',
+      );
     }
   }
 

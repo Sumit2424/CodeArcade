@@ -21,6 +21,10 @@ export function Launcher({ scores, onPlay }: LauncherProps) {
             onPlay={onPlay}
           />
         ))}
+        <div className="game-card game-card-soon">
+          <span className="game-title">Dino Runner</span>
+          <span className="game-description">Jump the cacti. Coming soon.</span>
+        </div>
       </div>
     </section>
   );

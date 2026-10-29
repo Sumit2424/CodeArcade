@@ -4,6 +4,19 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+### Added
+
+- Session strip that always shows what Claude is doing, with a timer.
+- Status bar entry for Code Arcade that turns to the warning color when Claude needs you.
+- `question` state, for when Claude asks you something, and `stopped` state, for a turn that ends with an error.
+- Pause card that says why Claude paused the game, instead of covering the board.
+- Unit tests for the session state machine and the hook event mapper.
+
+### Changed
+
+- The game panel opens in the main editor area so Claude's panel stays in view.
+- A failed turn (`StopFailure`) now shows as `stopped` instead of `idle`.
+
 ## [0.0.1] - 2026-10-18
 
 Initial preview.

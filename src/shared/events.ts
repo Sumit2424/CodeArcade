@@ -9,6 +9,8 @@ export type AssistantEvent =
   | { type: 'working' }
   /** The assistant is blocked until the user acts (for example, a permission prompt). */
   | { type: 'attentionNeeded' }
+  /** The assistant is asking the user a question and waits for the answer. */
+  | { type: 'questionAsked' }
   /** The turn completed normally. */
   | { type: 'turnFinished' }
   /** The turn ended abnormally. */

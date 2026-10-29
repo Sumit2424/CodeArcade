@@ -7,7 +7,8 @@ export function IntegrationPrompt() {
       <div>
         <strong>Pause automatically when Claude needs you</strong>
         <p className="muted">
-          Connect Claude Code so the game pauses on permission requests and when Claude finishes.
+          Adds small Claude Code hooks that record only event names and tool names. Never your
+          prompts or code. You can remove them any time.
         </p>
       </div>
       <button
@@ -15,7 +16,7 @@ export function IntegrationPrompt() {
         type="button"
         onClick={() => postToHost({ type: 'enableIntegration' })}
       >
-        Enable
+        Turn on
       </button>
     </aside>
   );

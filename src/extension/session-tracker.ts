@@ -3,7 +3,7 @@ import type { SessionState } from '../shared/session';
 
 /** No events for this long while "working" means we have lost track (e.g. an interrupt). */
 export const WORKING_STALE_MS = 2 * 60_000;
-/** A permission prompt can legitimately wait a long time, but not forever. */
+/** A permission prompt or question can legitimately wait a long time, but not forever. */
 export const ATTENTION_STALE_MS = 10 * 60_000;
 
 /** The pure transition rules. */
@@ -12,25 +12,29 @@ export function nextState(state: SessionState, event: AssistantEvent): SessionSt
     case 'turnStarted':
       return 'working';
     case 'working':
-      // A tool event after "finished" is a late straggler: hooks run as separate processes,
-      // so the last tool event can be written after Stop. A new turn starts with turnStarted.
-      return state === 'finished' ? state : 'working';
+      // A tool event after "finished" or "stopped" is a late straggler: hooks run as separate
+      // processes, so the last tool event can be written after Stop. A new turn starts with
+      // turnStarted.
+      return state === 'finished' || state === 'stopped' ? state : 'working';
     case 'attentionNeeded':
       return 'attention';
+    case 'questionAsked':
+      return 'question';
     case 'turnFinished':
       return 'finished';
     case 'sessionEnded':
-      // Some environments end the session right after every turn. Keep "finished" so the
-      // user still sees that the turn completed; end it only if it was cut short.
-      return state === 'finished' ? state : 'idle';
+      // Some environments end the session right after every turn. Keep "finished" and
+      // "stopped" so the user still sees how the turn ended; end it only if it was cut short.
+      return state === 'finished' || state === 'stopped' ? state : 'idle';
     case 'error':
-      return 'idle';
+      return 'stopped';
   }
 }
 
 /**
  * Tracks what the assistant is doing. Hooks give no "permission answered" or "interrupted"
- * signal, so "attention" ends on the next event of any kind, and a stuck state expires.
+ * signal, so "attention" and "question" end on the next event of any kind, and a stuck state
+ * expires.
  */
 export class SessionTracker {
   private current: SessionState = 'idle';
@@ -66,7 +70,7 @@ export class SessionTracker {
     const delay =
       this.current === 'working'
         ? this.staleAfter.working
-        : this.current === 'attention'
+        : this.current === 'attention' || this.current === 'question'
           ? this.staleAfter.attention
           : undefined;
     if (delay === undefined) return;

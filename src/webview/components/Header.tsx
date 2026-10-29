@@ -1,13 +1,8 @@
-import type { SessionState } from '../../shared/session';
-import { StatusPill } from './StatusPill';
-
 interface HeaderProps {
-  session: SessionState;
-  integrationEnabled: boolean;
   onHome: () => void;
 }
 
-export function Header({ session, integrationEnabled, onHome }: HeaderProps) {
+export function Header({ onHome }: HeaderProps) {
   return (
     <header className="header">
       <button className="brand" type="button" onClick={onHome}>
@@ -16,7 +11,6 @@ export function Header({ session, integrationEnabled, onHome }: HeaderProps) {
         </span>
         Code Arcade
       </button>
-      <StatusPill session={session} integrationEnabled={integrationEnabled} />
     </header>
   );
 }

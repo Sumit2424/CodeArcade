@@ -15,6 +15,9 @@ export function GameCard({ game, best, onPlay }: GameCardProps) {
       <span className="game-description">{game.description}</span>
       <span className="game-controls">{game.controls}</span>
       {best > 0 && <span className="game-best">Best {best}</span>}
+      <span className="game-play" aria-hidden="true">
+        Play →
+      </span>
     </button>
   );
 }

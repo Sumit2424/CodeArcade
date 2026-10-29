@@ -2,7 +2,7 @@
 
 Play a quick game in a VS Code panel while your AI coding assistant works, without losing sight of the assistant itself.
 
-Code Arcade opens beside your editor. With the optional Claude Code integration enabled, it knows when Claude is working, when it needs you (for example a permission request) and when it has finished, and pauses the game accordingly. It never touches Claude's interface or its approval prompts.
+Code Arcade opens in the main editor area, so Claude's panel stays in view next to it. With the optional Claude Code integration enabled, it knows when Claude is working, when it needs you (for example a permission request) and when it has finished, and pauses the game accordingly. It never touches Claude's interface or its approval prompts.
 
 <!-- TODO: add a screenshot or GIF of the launcher here -->
 <!-- TODO: add a GIF of the game pausing when Claude asks for permission -->
@@ -14,7 +14,8 @@ Code Arcade opens beside your editor. With the optional Claude Code integration 
 - **Snake**, fully playable, with speed that increases as you eat.
 - **Game launcher** with a dark UI and a small game contract for adding more games.
 - **Local best scores** per game, kept in VS Code's own extension storage.
-- **Auto-pause** when the panel loses focus, when Claude needs you and when Claude finishes (each can be turned off).
+- **Always-visible Claude status** strip (working, needs you, question, finished, stopped) with a timer, plus a status bar entry that turns amber when Claude is waiting for you.
+- **Auto-pause** when the panel loses focus, when Claude needs you or asks a question, and when a turn ends (each can be turned off).
 - **Claude Code integration** (opt-in, reversible) using Claude Code's lifecycle hooks.
 - **No accounts, no backend, no network requests, no telemetry.**
 
@@ -26,7 +27,7 @@ Code Arcade opens beside your editor. With the optional Claude Code integration 
 | Best scores and settings                                                                               | Built. Validation and storage logic checked in simulation.                                                                     |
 | Claude Code hooks → game state                                                                         | Checked with real headless Claude Code runs (v2.1.287, Windows): the events fire, are mapped and drive the state machine.      |
 | Behavior inside interactive VS Code (permission dialog on screen, approving or denying, Esc interrupt) | **Not yet verified.** Use _Code Arcade: Show Log_ to see what your setup reports, and please open an issue with your findings. |
-| Automated unit tests                                                                                   | Not written yet (Vitest is set up). Contributions welcome.                                                                     |
+| Automated unit tests                                                                                   | The session state machine and hook mapper are covered. Game rules and UI are not yet.                                          |
 | Dino Runner, Cursor and standalone-app support                                                         | Not built. See the [roadmap](#roadmap).                                                                                        |
 
 ## Quick start (from source)
@@ -64,7 +65,7 @@ The game pauses automatically when the panel loses focus. After Claude needs you
 
 | Command                                      | What it does                                |
 | -------------------------------------------- | ------------------------------------------- |
-| Code Arcade: Open Game Panel                 | Opens the game panel beside your editor     |
+| Code Arcade: Open Game Panel                 | Opens the game in the main editor area      |
 | Code Arcade: Enable Claude Code Integration  | Installs the Claude Code hooks (asks first) |
 | Code Arcade: Disable Claude Code Integration | Removes only Code Arcade's hooks            |
 | Code Arcade: Show Log                        | Shows the events the extension received     |
@@ -114,7 +115,7 @@ Contributions are welcome, especially new games and IDE adapters. Start with [CO
 
 - [ ] Verify and refine behavior in interactive VS Code (permission approve/deny, interrupts)
 - [ ] Dino Runner
-- [ ] Unit tests for the game rules and the session state machine
+- [ ] Unit tests for the game rules (the session state machine is covered)
 - [ ] More games
 - [ ] Marketplace and Open VSX publishing
 - [ ] Adapters for other environments (Cursor, standalone Claude Code app) where it is technically possible

@@ -6,26 +6,26 @@ import { GameScreen } from './components/GameScreen';
 import { Header } from './components/Header';
 import { IntegrationPrompt } from './components/IntegrationPrompt';
 import { Launcher } from './components/Launcher';
-import { SessionBanner } from './components/SessionBanner';
+import { SessionStrip } from './components/SessionStrip';
 import { useHost } from './hooks/useHost';
 
 export function App() {
-  const { version, session, integrationEnabled, scores, settings } = useHost();
+  const { version, session, sessionSince, integrationEnabled, scores, settings } = useHost();
   const [selectedGameId, setSelectedGameId] = useState<string>();
   const selectedGame = selectedGameId ? findGame(selectedGameId) : undefined;
 
   const shouldPauseFor = (state: SessionState): boolean =>
-    (state === 'attention' && settings.pauseWhenClaudeNeedsAttention) ||
-    (state === 'finished' && settings.pauseWhenClaudeFinishes);
+    ((state === 'attention' || state === 'question') && settings.pauseWhenClaudeNeedsAttention) ||
+    ((state === 'finished' || state === 'stopped') && settings.pauseWhenClaudeFinishes);
 
   return (
     <div className="app">
-      <Header
+      <Header onHome={() => setSelectedGameId(undefined)} />
+      <SessionStrip
         session={session}
+        since={sessionSince}
         integrationEnabled={integrationEnabled}
-        onHome={() => setSelectedGameId(undefined)}
       />
-      {integrationEnabled && <SessionBanner session={session} />}
       <main className="content">
         {selectedGame ? (
           <GameScreen

@@ -8,6 +8,8 @@ export interface HostState {
   /** Extension version, or undefined until the host has answered. */
   version: string | undefined;
   session: SessionState;
+  /** When the current session state began, in ms since the epoch. */
+  sessionSince: number;
   /** Whether the Claude Code hooks are installed. Without them the session never changes. */
   integrationEnabled: boolean;
   scores: ScoreMap;
@@ -18,6 +20,7 @@ export interface HostState {
 export function useHost(): HostState {
   const [version, setVersion] = useState<string>();
   const [session, setSession] = useState<SessionState>('idle');
+  const [sessionSince, setSessionSince] = useState(() => Date.now());
   const [integrationEnabled, setIntegrationEnabled] = useState(false);
   const [scores, setScores] = useState<ScoreMap>({});
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
@@ -30,7 +33,9 @@ export function useHost(): HostState {
           setVersion(message.version);
           break;
         case 'sessionState':
+          // The host only reports changes (plus one reply to 'ready'), so each message starts a new state.
           setSession(message.state);
+          setSessionSince(Date.now());
           break;
         case 'integration':
           setIntegrationEnabled(message.enabled);
@@ -47,5 +52,5 @@ export function useHost(): HostState {
     return unsubscribe;
   }, []);
 
-  return { version, session, integrationEnabled, scores, settings };
+  return { version, session, sessionSince, integrationEnabled, scores, settings };
 }

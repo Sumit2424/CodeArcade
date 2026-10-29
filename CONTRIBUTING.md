@@ -59,7 +59,7 @@ Keep commits focused. Conventional-style messages (`feat:`, `fix:`, `docs:`, `re
 
 Until there is broader automated coverage, please run through this when your change touches the area:
 
-- [ ] Panel opens beside the editor without taking keyboard focus; running the command again reuses it.
+- [ ] Panel opens in the main editor area without taking keyboard focus; running the command again reuses it.
 - [ ] A game starts, pauses (P, button, and by clicking away), resumes and restarts.
 - [ ] Best score persists after closing the panel and reloading the window.
 - [ ] With the integration enabled: the status pill and banner follow a real Claude Code turn, a permission prompt pauses the game, and _Disable_ removes the hooks cleanly.

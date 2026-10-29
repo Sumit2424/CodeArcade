@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { GameDefinition } from '../../games/types';
 import type { SessionState } from '../../shared/session';
 import { useGameRunner } from '../hooks/useGameRunner';
-import { GameOverlay } from './GameOverlay';
+import { GameOverlay, type ClaudePause } from './GameOverlay';
 
 interface GameCanvasProps {
   definition: GameDefinition;
@@ -35,11 +35,22 @@ export function GameCanvas({
   useEffect(() => {
     shouldPauseForRef.current = shouldPauseFor;
   }, [shouldPauseFor]);
+  // Remembers why a running game was paused, so the card can point the user at Claude.
+  const [claudePause, setClaudePause] = useState<ClaudePause>();
+  const runnerStateRef = useRef(snapshot.state);
+  useEffect(() => {
+    runnerStateRef.current = snapshot.state;
+    if (snapshot.state !== 'paused') setClaudePause(undefined);
+  }, [snapshot.state]);
   const previousSession = useRef(session);
   useEffect(() => {
     if (previousSession.current === session) return;
     previousSession.current = session;
-    if (shouldPauseForRef.current(session)) pause();
+    if (!shouldPauseForRef.current(session)) return;
+    if (runnerStateRef.current === 'running' && session !== 'idle' && session !== 'working') {
+      setClaudePause(session);
+    }
+    pause();
   }, [session, pause]);
 
   // The saved best changes right after a run ends, so remember what it was when the run began.
@@ -74,7 +85,12 @@ export function GameCanvas({
       </div>
       <div className="canvas-wrap">
         <canvas ref={canvasRef} className="game-canvas" />
-        <GameOverlay snapshot={snapshot} isNewBest={isNewBest} onActivate={activate} />
+        <GameOverlay
+          snapshot={snapshot}
+          isNewBest={isNewBest}
+          claudePause={claudePause}
+          onActivate={activate}
+        />
       </div>
     </div>
   );

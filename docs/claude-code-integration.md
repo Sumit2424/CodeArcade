@@ -36,21 +36,22 @@ Only the event name, session id, working folder and tool name are kept. The file
 
 ## How events become game state
 
-| Hook event                                        | Assistant event   | Effect on state                                              |
-| ------------------------------------------------- | ----------------- | ------------------------------------------------------------ |
-| `UserPromptSubmit`                                | `turnStarted`     | → `working`                                                  |
-| `PreToolUse`, `PostToolUse`, `PostToolUseFailure` | `working`         | → `working` (also ends `attention`); ignored once `finished` |
-| `PermissionRequest`                               | `attentionNeeded` | → `attention`                                                |
-| `Stop`                                            | `turnFinished`    | → `finished`                                                 |
-| `StopFailure`                                     | `error`           | → `idle`                                                     |
-| `SessionEnd`                                      | `sessionEnded`    | `finished` stays `finished`; anything else → `idle`          |
+| Hook event                                                | Assistant event   | Effect on state                                              |
+| --------------------------------------------------------- | ----------------- | ------------------------------------------------------------ |
+| `UserPromptSubmit`                                        | `turnStarted`     | → `working`                                                  |
+| `PreToolUse`, `PostToolUse`, `PostToolUseFailure`         | `working`         | → `working` (also ends `attention`); ignored once `finished` |
+| `PermissionRequest`                                       | `attentionNeeded` | → `attention`                                                |
+| `PreToolUse` or `PermissionRequest` for `AskUserQuestion` | `questionAsked`   | → `question`                                                 |
+| `Stop`                                                    | `turnFinished`    | → `finished`                                                 |
+| `StopFailure`                                             | `error`           | → `stopped` (stays until the next prompt)                    |
+| `SessionEnd`                                              | `sessionEnded`    | `finished` and `stopped` stay; anything else → `idle`        |
 
 Rules that exist because of how hooks behave:
 
 - **Tool events never pause the game.** They only keep `working` alive.
-- **There is no "permission answered" event.** `attention` ends on the next event of any kind (typically the tool running after you approve), or manually when you press Space.
+- **There is no "permission answered" event.** `attention` and `question` end on the next event of any kind (typically the tool running after you approve), or manually when you press Space.
 - **Stragglers are ignored.** Hooks run as separate processes, so the last tool event can be written after `Stop`; a tool event after `finished` does not revive `working`.
-- **Silence expires.** `working` with no events for 2 minutes, or `attention` for 10 minutes, falls back to `idle`. This covers cases where no event is sent, such as an interrupt.
+- **Silence expires.** `working` with no events for 2 minutes, `attention` or `question` for 10 minutes, falls back to `idle`. This covers cases where no event is sent, such as an interrupt.
 - **One state per window.** Events are filtered to the window's workspace folders, but two simultaneous conversations in the same folder share one state.
 
 ## What has been verified
@@ -65,7 +66,7 @@ Tested with Claude Code 2.1.287 on Windows, headless (`claude -p`) with the hook
 
 Full pipeline (hook → file → mapper → state machine) was run against real sessions: a read-only task produced `working → finished`, and a task needing permission produced `working → attention → finished`.
 
-**Not yet verified:** behavior in interactive VS Code, namely the permission dialog on screen, what happens after approving or denying, the Esc interrupt, whether hooks added mid-conversation apply to a running conversation (starting a new conversation is the safe option), and behavior in the standalone app.
+**Not yet verified:** that `AskUserQuestion` really reaches the hooks as `PreToolUse` or `PermissionRequest` (the mapper accepts either), that `StopFailure` fires when a turn fails, and behavior in interactive VS Code, namely the permission dialog on screen, what happens after approving or denying, the Esc interrupt (Claude Code is not documented to send a hook for it, so an interrupted turn is only noticed when the 2 minute silence timer expires, and is shown as idle, not stopped), whether hooks added mid-conversation apply to a running conversation (starting a new conversation is the safe option), and behavior in the standalone app.
 
 Documentation and reality differed in places. For example, the documented `user_prompt`, `tool_output` and `end_reason` fields appeared as `prompt`, `tool_response` and `reason` in 2.1.287. That is one reason the hook trusts only `hook_event_name`, `session_id`, `cwd` and `tool_name`.
 

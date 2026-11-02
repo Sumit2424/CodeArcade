@@ -4,7 +4,8 @@
   "description": "Play small games while your AI coding assistant works.",
   "version": "0.1.0",
   "license": "MIT",
-  "publisher": "local",
+  "publisher": "sumit2424",
+  "icon": "media/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/Sumit2424/CodeArcade.git"

@@ -26,6 +26,9 @@
     "theme": "dark"
   },
   "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "commands": [
       {
@@ -57,6 +60,11 @@
     "configuration": {
       "title": "Code Arcade",
       "properties": {
+        "codeArcade.openWhenClaudeStarts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the Code Arcade panel automatically when Claude Code starts working, without taking keyboard focus. Requires the Claude Code integration."
+        },
         "codeArcade.pauseWhenPanelLosesFocus": {
           "type": "boolean",
           "default": true,

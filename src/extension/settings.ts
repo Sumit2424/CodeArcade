@@ -28,6 +28,11 @@ export function notifyWhenClaudeNeedsAttention(): boolean {
     .get<boolean>('notifyWhenClaudeNeedsAttention', true);
 }
 
+/** Host-only setting: whether to open the game panel when Claude Code starts working. */
+export function openWhenClaudeStarts(): boolean {
+  return vscode.workspace.getConfiguration(SECTION).get<boolean>('openWhenClaudeStarts', true);
+}
+
 /** Calls `listener` when any Code Arcade setting changes. */
 export function onSettingsChanged(listener: () => void): vscode.Disposable {
   return vscode.workspace.onDidChangeConfiguration((event) => {

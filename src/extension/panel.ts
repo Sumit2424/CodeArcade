@@ -13,6 +13,7 @@ import { notifyWhenClaudeNeedsAttention, onSettingsChanged, readSettings } from 
 export interface PanelServices {
   readonly scores: ScoreStore;
   readonly claude: ClaudeCodeIntegration;
+  readonly session: SessionController;
   readonly log: Logger;
 }
 
@@ -31,8 +32,8 @@ export class GamePanel {
     const panel = vscode.window.createWebviewPanel(
       'codeArcade.game',
       'Code Arcade',
-      // Column One keeps the game in the main editor area so Claude's panel stays in view.
-      { viewColumn: vscode.ViewColumn.One, preserveFocus: true },
+      // Beside opens the game in a split next to the active editor, so Claude's panel stays in view.
+      { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
       {
         enableScripts: true,
         // Keeps a paused game alive while its tab is in the background.
@@ -58,12 +59,11 @@ export class GamePanel {
     private readonly version: string,
     private readonly services: PanelServices,
   ) {
-    // Listening is tied to the panel: nothing runs while no game is open.
-    this.session = new SessionController(services.claude.createAdapter(), services.log);
+    // The session outlives the panel: it is what opens the panel when Claude starts working.
+    this.session = services.session;
 
     panel.webview.html = buildWebviewHtml(panel.webview, webviewRoot);
     this.disposables.push(
-      this.session,
       this.statusBar,
       panel.webview.onDidReceiveMessage((raw: unknown) => this.handleMessage(raw)),
       panel.onDidDispose(() => this.dispose()),

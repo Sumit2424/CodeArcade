@@ -28,8 +28,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh release create "$GITHUB_REF_NAME" ./*.vsix --generate-notes
 
-      # Publishing to the marketplaces needs access tokens stored as repository secrets.
-      # Uncomment once the publisher accounts exist (see README, Roadmap).
+      # Marketplace publishing is manual for now: download the VSIX from the GitHub release and
+      # upload it at https://marketplace.visualstudio.com/manage (and at open-vsx.org).
+      # To automate later, store access tokens as repository secrets and uncomment these steps.
       # - run: npx vsce publish --packagePath ./*.vsix --no-dependencies
       #   env:
       #     VSCE_PAT: ${{ secrets.VSCE_PAT }}

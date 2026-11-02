@@ -29,7 +29,7 @@ body:
     attributes:
       label: Versions
       description: Code Arcade, VS Code, Claude Code extension, and your operating system.
-      placeholder: 'Code Arcade 0.0.1, VS Code 1.9x, Claude Code 2.1.x, Windows 11'
+      placeholder: 'Code Arcade 0.1.0, VS Code 1.9x, Claude Code 2.1.x, Windows 11'
     validations:
       required: true
   - type: dropdown

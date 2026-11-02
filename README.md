@@ -7,7 +7,7 @@ Code Arcade opens in the main editor area, so Claude's panel stays in view next 
 <!-- TODO: add a screenshot or GIF of the launcher here -->
 <!-- TODO: add a GIF of the game pausing when Claude asks for permission -->
 
-> **Status: early preview (0.0.1).** See [What works today](#what-works-today) for exactly what has been tested.
+> **Status: early preview (0.1.0).** See [What works today](#what-works-today) for exactly what has been tested.
 
 ## Features
 
@@ -48,8 +48,12 @@ Press **F5**. A second VS Code window (the Extension Development Host) opens. In
 ```bash
 npm ci
 npm run package        # produces code-arcade-<version>.vsix
-code --install-extension code-arcade-0.0.1.vsix
+code --install-extension code-arcade-0.1.0.vsix
 ```
+
+## Supported editors
+
+Code Arcade is built on the VS Code extension API, so it runs in VS Code and in editors based on it, such as Cursor, Windsurf and VSCodium (the last three install from [Open VSX](https://open-vsx.org) once the extension is published there). Editors with a different extension system, such as JetBrains IDEs, are not supported yet. The Claude Code integration has been checked in VS Code; other editors may need the [adapters](#roadmap) described below.
 
 ## Using it
 
@@ -75,6 +79,7 @@ The game pauses automatically when the panel loses focus. After Claude needs you
 
 | Setting                                     | Default | Effect                                                           |
 | ------------------------------------------- | ------- | ---------------------------------------------------------------- |
+| `codeArcade.openWhenClaudeStarts`           | on      | Open the panel when Claude starts working, without taking focus  |
 | `codeArcade.pauseWhenPanelLosesFocus`       | on      | Pause when the panel loses focus or is hidden                    |
 | `codeArcade.pauseWhenClaudeNeedsAttention`  | on      | Pause when Claude needs you                                      |
 | `codeArcade.pauseWhenClaudeFinishes`        | on      | Pause when Claude finishes its turn                              |

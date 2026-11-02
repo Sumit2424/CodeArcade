@@ -4,8 +4,14 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-02
+
+First public release.
+
 ### Added
 
+- Extension icon and Marketplace metadata (repository, bugs, homepage, keywords).
+- `codeArcade.openWhenClaudeStarts` setting to open the panel automatically when Claude Code starts working.
 - Session strip that always shows what Claude is doing, with a timer.
 - Status bar entry for Code Arcade that turns to the warning color when Claude needs you.
 - `question` state, for when Claude asks you something, and `stopped` state, for a turn that ends with an error.

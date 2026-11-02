@@ -2,10 +2,17 @@
   "name": "code-arcade",
   "displayName": "Code Arcade",
   "description": "Play small games while your AI coding assistant works.",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.1.0",
   "license": "MIT",
   "publisher": "local",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sumit2424/CodeArcade.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sumit2424/CodeArcade/issues"
+  },
+  "homepage": "https://github.com/Sumit2424/CodeArcade#readme",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -19,7 +26,11 @@
     "claude",
     "claude code",
     "ai",
-    "productivity"
+    "productivity",
+    "cursor",
+    "windsurf",
+    "vscodium",
+    "code editor"
   ],
   "galleryBanner": {
     "color": "#0d0f14",
@@ -101,7 +112,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
-    "package": "node esbuild.mjs --production && vite build && vsce package --no-dependencies --allow-missing-repository --no-rewrite-relative-links"
+    "package": "node esbuild.mjs --production && vite build && vsce package --no-dependencies --no-rewrite-relative-links"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

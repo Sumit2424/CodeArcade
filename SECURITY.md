@@ -8,7 +8,7 @@ Code Arcade is in early preview. Only the latest release receives security fixes
 
 **Please do not open a public issue for security problems.**
 
-Report privately using GitHub's "Report a vulnerability" button on the repository's **Security** tab (private vulnerability reporting). <!-- TODO: enable private vulnerability reporting in the repository settings, or replace this line with a contact email. -->
+Report privately by emailing **codearcadehelp@gmail.com**.
 
 Please include what you found, how to reproduce it, and the impact you expect. You can expect an acknowledgement within a few days. This is a volunteer project, so fix times vary, but security reports take priority.
 

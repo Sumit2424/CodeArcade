@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
-    url: https://github.com/OWNER/REPO/security/advisories/new
-    about: Report security problems privately, not in a public issue. (Replace OWNER/REPO with this repository's path.)
+    url: https://github.com/Sumit2424/CodeArcade/blob/main/SECURITY.md
+    about: Report security problems privately by email, not in a public issue.
+  - name: Questions and support
+    url: mailto:codearcadehelp@gmail.com
+    about: Email codearcadehelp@gmail.com for questions, feedback or anything that does not fit an issue.

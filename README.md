@@ -112,6 +112,10 @@ docs/          architecture, adding a game, Claude Code integration
 
 The layers are kept apart by ESLint import rules. Read [docs/architecture.md](docs/architecture.md) for the details.
 
+## Support
+
+Found a bug or have feedback? Open an [issue](https://github.com/Sumit2424/CodeArcade/issues), or email **codearcadehelp@gmail.com**. For security problems, email only (see [SECURITY.md](SECURITY.md)).
+
 ## Contributing
 
 Contributions are welcome, especially new games and IDE adapters. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/adding-a-game.md](docs/adding-a-game.md).
